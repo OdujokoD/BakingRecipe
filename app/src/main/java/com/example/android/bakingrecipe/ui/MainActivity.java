@@ -1,10 +1,12 @@
 package com.example.android.bakingrecipe.ui;
 
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.android.bakingrecipe.R;
 import com.example.android.bakingrecipe.adapter.RecipeAdapter;
@@ -20,59 +22,25 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity
-        implements RecipeAdapter.RecipeAdapterOnClickListener{
-
-    @BindView(R.id.rv_recipe)
-    RecyclerView mRecipe;
-
-
-    private RecipeAdapter recipeAdapter;
+public class MainActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        Toast.makeText(this, savedInstanceState == null ? "True" : "False", Toast.LENGTH_LONG).show();
 
-        mRecipe.setLayoutManager(layoutManager);
-        mRecipe.setHasFixedSize(true);
+        if(savedInstanceState == null) {
 
-        recipeAdapter = new RecipeAdapter(this);
-        mRecipe.setAdapter(recipeAdapter);
-        fetchRecipes();
+            RecipeListFragment recipeListFragment = new RecipeListFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            fragmentManager.beginTransaction()
+                    .add(R.id.fl_recipe_list_container, recipeListFragment)
+                    .commit();
+
+        }
     }
 
-    @Override
-    public void recipeOnClick(Recipe currentRecipe) {
-
-    }
-
-    private void fetchRecipes(){
-        RecipeService service = NetworkSetup.setupNetwork.create(RecipeService.class);
-        service.getRecipes()
-                .enqueue(new Callback<ArrayList<Recipe>>() {
-
-                    @Override
-                    public void onResponse(Call<ArrayList<Recipe>> call,
-                                           Response<ArrayList<Recipe>> response) {
-                        loadRecipes(response.body());
-                        Log.d("SUCCESS", response.body().toString());
-                        //hideProgressBar();
-                        //showFab();
-                    }
-
-                    @Override
-                    public void onFailure(Call<ArrayList<Recipe>> call, Throwable t) {
-                        //showNetworkError();
-                        Log.d("LOG_TAG", t.getMessage());
-                    }
-                });
-    }
-
-    private void loadRecipes(ArrayList<Recipe> recipes){
-        recipeAdapter.setRecipe(recipes);
-    }
 }
