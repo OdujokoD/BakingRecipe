@@ -13,10 +13,6 @@ public class Recipe implements Parcelable{
     private int servings;
     private String image;
 
-    public Recipe(){
-
-    }
-
     protected Recipe(Parcel in) {
         id = in.readInt();
         name = in.readString();
@@ -58,32 +54,16 @@ public class Recipe implements Parcelable{
         return ingredients;
     }
 
-    public void setIngredients(ArrayList<Ingredient> ingredients) {
-        this.ingredients = ingredients;
-    }
-
     public ArrayList<Step> getSteps() {
         return steps;
-    }
-
-    public void setSteps(ArrayList<Step> steps) {
-        this.steps = steps;
     }
 
     public int getServings() {
         return servings;
     }
 
-    public void setServings(int servings) {
-        this.servings = servings;
-    }
-
     public String getImage() {
         return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 
     @Override

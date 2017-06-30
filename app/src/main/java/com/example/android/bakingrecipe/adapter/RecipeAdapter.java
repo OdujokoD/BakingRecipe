@@ -5,10 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bakingrecipe.R;
 import com.example.android.bakingrecipe.model.Recipe;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -16,6 +18,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
 
     private ArrayList<Recipe> recipes;
     private final RecipeAdapterOnClickListener mClickHandler;
+    private Context context;
 
     public RecipeAdapter(RecipeAdapterOnClickListener clickListener){
         mClickHandler = clickListener;
@@ -23,7 +26,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
 
     @Override
     public RecipeAdapterViewAdapter onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
+        context = parent.getContext();
         int layoutIdForListItem = R.layout.recipe_list_content;
         LayoutInflater inflater = LayoutInflater.from(context);
         boolean shouldAttachToParentImmediately = false;
@@ -62,6 +65,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
         private final TextView mIngredientCount;
         private final TextView mStepCount;
         private final TextView mServings;
+        private ImageView mRecipeImage;
 
         RecipeAdapterViewAdapter(View itemView) {
             super(itemView);
@@ -69,20 +73,34 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeAdap
             mIngredientCount = (TextView)itemView.findViewById(R.id.tv_recipe_ingredient_count);
             mStepCount = (TextView)itemView.findViewById(R.id.tv_recipe_step_count);
             mServings = (TextView)itemView.findViewById(R.id.tv_recipe_serving_count);
+            mRecipeImage = (ImageView)itemView.findViewById(R.id.iv_recipe_image);
             itemView.setOnClickListener(this);
         }
 
         void bind(int position){
             Recipe recipe = recipes.get(position);
             String recipeName = recipe.getName();
-            int ingredientCount = recipe.getIngredients().size();
-            int stepCount = recipe.getSteps().size();
-            int servings = recipe.getServings();
+            String ingredientCount = recipe.getIngredients().size() + " Ingredients";
+            String stepCount = recipe.getSteps().size() + " Steps";
+            String servings = recipe.getServings()  + " Servings";
+            String imageUrl = recipe.getImage();
 
             mRecipeName.setText(recipeName);
-            mIngredientCount.setText(String.valueOf(ingredientCount));
-            mStepCount.setText(String.valueOf(stepCount));
-            mServings.setText(String.valueOf(servings));
+            mIngredientCount.setText(ingredientCount);
+            mStepCount.setText(stepCount);
+            mServings.setText(servings);
+
+            if(imageUrl.length() == 0) {
+                Picasso.with(context)
+                        .load(R.drawable.recipe)
+                        .into(mRecipeImage);
+            }else {
+                Picasso.with(context)
+                        .load(imageUrl)
+                        .placeholder(R.drawable.recipe)
+                        .error(R.drawable.recipe)
+                        .into(mRecipeImage);
+            }
         }
 
         @Override

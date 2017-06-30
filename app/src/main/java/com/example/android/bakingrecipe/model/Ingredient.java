@@ -3,17 +3,14 @@ package com.example.android.bakingrecipe.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-class Ingredient implements Parcelable{
-    private float quantity;
+public class Ingredient implements Parcelable{
+    private Float quantity;
     private String measure;
     private String ingredient;
 
-    public Ingredient(){
-
-    }
 
     protected Ingredient(Parcel in) {
-        quantity = in.readInt();
+        quantity = in.readFloat();
         measure = in.readString();
         ingredient = in.readString();
     }
@@ -30,28 +27,16 @@ class Ingredient implements Parcelable{
         }
     };
 
-    public float getQuantity() {
+    public Float getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(float quantity) {
-        this.quantity = quantity;
     }
 
     public String getMeasure() {
         return measure;
     }
 
-    public void setMeasure(String measure) {
-        this.measure = measure;
-    }
-
     public String getIngredient() {
         return ingredient;
-    }
-
-    public void setIngredient(String ingredient) {
-        this.ingredient = ingredient;
     }
 
     @Override
