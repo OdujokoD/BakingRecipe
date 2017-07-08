@@ -14,9 +14,6 @@ public class RecipeContract {
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_RECIPE).build();
 
         public static final String TABLE_NAME = "recipe";
-        public static final String COLUMN_RECIPE_ID = "recipeId";
-        public static final String COLUMN_RECIPE_NAME = "recipeName";
-        public static final String COLUMN_RECIPE_SERVING_COUNT = "recipeServingCount";
-        public static final String COLUMN_RECIPE_IMAGE_URL = "recipeImageUrl";
+        public static final String COLUMN_RECIPE_GSON = "recipeGson";
     }
 }

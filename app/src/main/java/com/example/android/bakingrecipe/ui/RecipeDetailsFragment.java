@@ -21,6 +21,7 @@ import com.example.android.bakingrecipe.model.Step;
 
 import java.util.ArrayList;
 
+import static com.example.android.bakingrecipe.util.Constants.MULTIPANE_STRING;
 import static com.example.android.bakingrecipe.util.Constants.RECIPE_OBJECT;
 import static com.example.android.bakingrecipe.util.Constants.STEP_DESCRIPTION;
 import static com.example.android.bakingrecipe.util.Constants.STEP_VIDEO;
@@ -35,6 +36,8 @@ public class RecipeDetailsFragment extends Fragment
 
     private TextView mIngredients;
     private onStepLoad mCallback;
+    private onStepClickMultipane mOnStepClickMultipane;
+    private boolean multipane;
 
     public RecipeDetailsFragment(){
 
@@ -65,12 +68,12 @@ public class RecipeDetailsFragment extends Fragment
                 recipe = getArguments().getParcelable(RECIPE_OBJECT);
                 mSteps = recipe.getSteps();
                 ingredients = recipe.getIngredients();
+                multipane = getArguments().getBoolean(MULTIPANE_STRING);
             }
         }
 
         loadIngredient(ingredients);
         loadSteps(mSteps);
-
 
         return rootView;
     }
@@ -79,12 +82,17 @@ public class RecipeDetailsFragment extends Fragment
         void getFirstStep(String videoUrl, String description);
     }
 
+    interface onStepClickMultipane{
+        void getStep(String videoUrl, String description);
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
         try{
             mCallback = (onStepLoad) context;
+            mOnStepClickMultipane = (onStepClickMultipane) context;
         }catch (ClassCastException e){
             throw new ClassCastException(context.toString()
                     + " must implement OnImageClickListener");
@@ -96,10 +104,14 @@ public class RecipeDetailsFragment extends Fragment
         if(videoURL.length() <= 0){
             Toast.makeText(getActivity(), "No video available for this step.", Toast.LENGTH_SHORT).show();
         }else{
-            Intent intent = new Intent(getActivity(), VideoPlayerActivity.class);
-            intent.putExtra(STEP_VIDEO, videoURL);
-            intent.putExtra(STEP_DESCRIPTION, description);
-            startActivity(intent);
+            if(multipane){
+                mOnStepClickMultipane.getStep(videoURL, description);
+            }else {
+                Intent intent = new Intent(getActivity(), VideoPlayerActivity.class);
+                intent.putExtra(STEP_VIDEO, videoURL);
+                intent.putExtra(STEP_DESCRIPTION, description);
+                startActivity(intent);
+            }
         }
     }
 

@@ -17,11 +17,8 @@ public class RecipeDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         final String CREATE_RECIPE_TABLE = "CREATE TABLE " +
                 RecipeContract.RecipeEntry.TABLE_NAME + " (" +
-                RecipeContract.RecipeEntry.COLUMN_RECIPE_ID + " TEXT NOT NULL," +
-                RecipeContract.RecipeEntry.COLUMN_RECIPE_NAME + " TEXT NOT NULL, " +
-                RecipeContract.RecipeEntry.COLUMN_RECIPE_SERVING_COUNT + " INTEGER NOT NULL, " +
-                RecipeContract.RecipeEntry.COLUMN_RECIPE_IMAGE_URL + " TEXT, " +
-                " UNIQUE (" + RecipeContract.RecipeEntry.COLUMN_RECIPE_ID + ") ON CONFLICT REPLACE" +
+                RecipeContract.RecipeEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                RecipeContract.RecipeEntry.COLUMN_RECIPE_GSON + " TEXT" +
                 "); ";
 
         db.execSQL(CREATE_RECIPE_TABLE);

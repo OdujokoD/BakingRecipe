@@ -39,16 +39,8 @@
             android:name=".provider.RecipeContentProvider"
             android:authorities="com.example.android.bakingrecipe.RecipeContentProvider"
             android:exported="false" />
-        <provider
-            android:name=".provider.IngredientContentProvider"
-            android:authorities="com.example.android.bakingrecipe.IngredientContentProvider"
-            android:exported="false" />
-        <provider
-            android:name=".provider.StepContentProvider"
-            android:authorities="com.example.android.bakingrecipe.StepContentProvider"
-            android:exported="false" />
 
-        <receiver android:name=".BakingRecipeWidget">
+        <receiver android:name=".widget.BakingRecipeWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
