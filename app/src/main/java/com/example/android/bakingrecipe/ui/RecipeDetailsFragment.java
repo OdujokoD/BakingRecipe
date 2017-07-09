@@ -3,6 +3,7 @@ package com.example.android.bakingrecipe.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +30,7 @@ import static com.example.android.bakingrecipe.util.Constants.STEP_VIDEO;
 public class RecipeDetailsFragment extends Fragment
         implements StepAdapter.StepAdapterOnClickListener{
 
+    private String RECYCLERVIEW_POSITION = "scroll";
     private StepAdapter stepAdapter;
     private Recipe recipe;
     private ArrayList<Step> mSteps;
@@ -38,6 +40,8 @@ public class RecipeDetailsFragment extends Fragment
     private onStepLoad mCallback;
     private onStepClickMultipane mOnStepClickMultipane;
     private boolean multipane;
+    private LinearLayoutManager layoutManager;
+    private Parcelable layoutManagerSavedState;
 
     public RecipeDetailsFragment(){
 
@@ -50,7 +54,7 @@ public class RecipeDetailsFragment extends Fragment
 
         mIngredients = (TextView)rootView.findViewById(R.id.tv_ingredient_list);
         RecyclerView mStepList = (RecyclerView)rootView.findViewById(R.id.rv_recipe_steps);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(),
+        layoutManager = new LinearLayoutManager(getActivity(),
                 LinearLayoutManager.VERTICAL, false);
 
         mStepList.setLayoutManager(layoutManager);
@@ -63,6 +67,7 @@ public class RecipeDetailsFragment extends Fragment
             recipe = savedInstanceState.getParcelable(RECIPE_OBJECT);
             mSteps = recipe.getSteps();
             ingredients = recipe.getIngredients();
+            layoutManagerSavedState = savedInstanceState.getParcelable(RECYCLERVIEW_POSITION);
         }else{
             if (getArguments() != null) {
                 recipe = getArguments().getParcelable(RECIPE_OBJECT);
@@ -140,10 +145,14 @@ public class RecipeDetailsFragment extends Fragment
         if(steps != null) {
             mCallback.getFirstStep(steps.get(0).getVideoURL(), steps.get(0).getDescription());
         }
+        if(layoutManagerSavedState != null){
+            layoutManager.onRestoreInstanceState(layoutManagerSavedState);
+        }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(RECIPE_OBJECT, recipe);
+        outState.putParcelable(RECYCLERVIEW_POSITION, layoutManager.onSaveInstanceState());
     }
 }

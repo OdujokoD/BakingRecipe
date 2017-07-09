@@ -32,7 +32,6 @@ public class RecipeDetailActivity extends AppCompatActivity
     private Recipe recipe;
     private RecipeDbLoader recipeDbLoader;
     private boolean databaseIsEmpty;
-    private final String DATABASE_STRING = "recipe";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,16 +66,9 @@ public class RecipeDetailActivity extends AppCompatActivity
                     .add(R.id.fl_recipe_details_container, recipeDetailsFragment)
                     .commit();
 
-        }else{
-            databaseIsEmpty = savedInstanceState.getBoolean(DATABASE_STRING, true);
-            checkDatabaseStatus();
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean(DATABASE_STRING, databaseIsEmpty);
-    }
 
     private void checkDatabaseStatus(){
         Gson gson = new Gson();

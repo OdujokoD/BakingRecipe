@@ -2,7 +2,6 @@ package com.example.android.bakingrecipe;
 
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingResource;
-import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -31,6 +30,10 @@ public class MainActivityTest {
     private IdlingResource idlingResource;
     private static final String RECIPE_NAME = "Nutella Pie";
 
+    public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
+        return new RecyclerViewMatcher(recyclerViewId);
+    }
+
     @Rule public ActivityTestRule<MainActivity> mainActivityActivityTestRule
             = new ActivityTestRule<>(MainActivity.class);
 
@@ -48,24 +51,22 @@ public class MainActivityTest {
 
     @Test
     public void displayRecipeDetail_OnClickOfView(){
-        onView(withId(R.id.rv_recipe))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-
+        onView(withRecyclerView(R.id.rv_recipe).atPosition(0)).perform(click());
         onView(withId(R.id.fl_recipe_details_container)).check(matches(isDisplayed()));
+
     }
 
     @Test
     public void recyclerView_scrollToPosition() {
-        onView(withId(R.id.rv_recipe))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+
+        onView(withRecyclerView(R.id.rv_recipe).atPosition(0)).perform(click());
     }
 
     @Test
     public void getRecipeName_OnClickOfView() {
 
-        onView(withId(R.id.rv_recipe))
-                .perform(RecyclerViewActions.actionOnItem(
-                        hasDescendant(withText(RECIPE_NAME)), click()));
+        onView(withRecyclerView(R.id.rv_recipe).atPosition(0))
+                .check(matches(hasDescendant(withText(RECIPE_NAME))));
     }
 
 
